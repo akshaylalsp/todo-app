@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'authentication',
+    'tasks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,10 +53,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'todo_site.urls'
 
+import os
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR,'templates'),
+            os.path.join(BASE_DIR,'authentication/templates'),
+            os.path.join(BASE_DIR,'tasks/templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
