@@ -1,15 +1,33 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserRegistrationForm
-
+from .forms import CustomUserRegistrationForm,TaskCreateForm,LoginForm
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login,authenticate
 # Create your views here.
 
 def login_view(request):
-    pass 
+    if request.method == 'POST':
+        print(request.POST)
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request,username=username,password=password)
+
+            if user is not None:
+                login(request,user)
+                return HttpResponse('logined')
+        else:
+            
+            return HttpResponse('error')
+    form = LoginForm()
+    return render(request,'login.html',{'form':form})
+
 
 @login_required
 def logout_view(request):
-    pass
+    return redirect('login')
+
 
 
 def register_view(request):
@@ -24,3 +42,16 @@ def register_view(request):
     form = CustomUserRegistrationForm()
         
     return render(request,'register.html',{'form':form})
+
+@login_required
+def add_task_view(request):
+    if request.method == 'POST':
+        form = TaskCreateForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form['user']=request.user
+            form.save()
+            return HttpResponse('task added')
+        else:
+            pass
+
