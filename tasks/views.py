@@ -48,10 +48,11 @@ def add_task_view(request):
     if request.method == 'POST':
         form = TaskCreateForm(request.POST)
         if form.is_valid():
-            form.save(commit=False)
-            form['user']=request.user
-            form.save()
+            task = form.save(commit=False)
+            task.user=request.user
+            task.save()
             return HttpResponse('task added')
         else:
             pass
-
+    form = TaskCreateForm()
+    return render(request,'add_task.html',{'form':form})
