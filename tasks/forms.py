@@ -16,6 +16,12 @@ class TaskCreateForm(ModelForm):
         model = Tasks
         fields = ['name','description']
 
+class TaskUpdateForm(ModelForm):
+    class Meta:
+        model = Tasks
+        fields = ['name','description','is_completed']
+
+
 class LoginForm(Form):
     username = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
